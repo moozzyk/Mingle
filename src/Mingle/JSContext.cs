@@ -17,5 +17,16 @@ namespace Mingle
         {
             NativeMethods.duk_destroy_heap(_dukContext);
         }
+
+        public bool Evaluate(string source)
+        {
+            var compilationFlags = CompilationFlags.DUK_COMPILE_EVAL | CompilationFlags.DUK_COMPILE_NOSOURCE |
+                CompilationFlags.DUK_COMPILE_STRLEN | CompilationFlags.DUK_COMPILE_NOFILENAME;
+
+            NativeMethods.duk_eval_raw(_dukContext, source, (ulong)source.Length, (uint)compilationFlags));
+            var result = NativeMethods.duk_get_int(_dukContext, -1);
+
+            return true;
+        }
     }
 }

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Mingle.Tests": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

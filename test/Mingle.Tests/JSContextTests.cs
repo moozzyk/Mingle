@@ -10,6 +10,7 @@ namespace MIingle.Tests
         {
             using (var context = new JSContext())
             {
+                context.Evaluate("1+2");
             }
         }
     }
