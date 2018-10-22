@@ -1,5 +1,6 @@
 ﻿using Mingle.Internal.Duktape;
 using System;
+using System.Runtime.InteropServices;
 
 namespace Mingle
 {
@@ -21,9 +22,13 @@ namespace Mingle
         public bool Evaluate(string source)
         {
             var compilationFlags = CompilationFlags.DUK_COMPILE_EVAL | CompilationFlags.DUK_COMPILE_NOSOURCE |
-                CompilationFlags.DUK_COMPILE_STRLEN | CompilationFlags.DUK_COMPILE_NOFILENAME;
+                CompilationFlags.DUK_COMPILE_STRLEN | CompilationFlags.DUK_COMPILE_NOFILENAME |
+                CompilationFlags.DUK_COMPILE_SAFE;
 
-            NativeMethods.duk_eval_raw(_dukContext, source, (ulong)source.Length, (uint)compilationFlags));
+            if (NativeMethods.duk_eval_raw(_dukContext, source, (ulong)source.Length, (uint)compilationFlags) != 0)
+            {
+                var error = Marshal.PtrToStringAnsi(NativeMethods.duk_safe_to_lstring(_dukContext, -1, IntPtr.Zero));
+            }
             var result = NativeMethods.duk_get_int(_dukContext, -1);
 
             return true;

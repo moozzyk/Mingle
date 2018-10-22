@@ -33,7 +33,7 @@ namespace Mingle.Internal.Duktape
         [DllImport("duktape")]
         public static extern int duk_get_int(IntPtr ctx, int idx);
 
-        [DllImport("duktape", CharSet = CharSet.Ansi)]
-        public static extern string duk_safe_to_lstring(IntPtr ctx, int idx, IntPtr out_len);
+        [DllImport("duktape")]
+        public static extern IntPtr duk_safe_to_lstring(IntPtr ctx, int idx, IntPtr out_len);
     }
 }
