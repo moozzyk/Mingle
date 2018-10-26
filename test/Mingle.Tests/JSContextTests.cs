@@ -12,6 +12,7 @@ namespace MIingle.Tests
         public void EvaluateInt_returns_expected_value()
         {
             Assert.Equal(42, _context.EvaluateInt("42 + 0"));
+            Assert.Equal(42, _context.EvaluateInt("var x = 42 + 0; \n var y = 56; \n x * y"));
         }
 
         [Fact]

@@ -18,22 +18,57 @@ namespace Mingle.Internal.Duktape
         DUK_COMPILE_FUNCEXPR =      1 << 12,
     }
 
-    public class NativeMethods
+    public static class Duktape
     {
-        [DllImport("duktape")]
-        public static extern IntPtr duk_create_heap(IntPtr alloc_func, IntPtr realloc_func, IntPtr free_func,
-            IntPtr heap_udata, IntPtr fatal_handler);
+        public static IntPtr CreateHeap()
+        {
+            return NativeMethods.duk_create_heap(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+        }
 
-        [DllImport("duktape")]
-        public static extern IntPtr duk_destroy_heap(IntPtr ctx);
+        public static void DestroyHeap(IntPtr ctx)
+        {
+            NativeMethods.duk_destroy_heap(ctx);
+        }
 
-        [DllImport("duktape", CharSet = CharSet.Ansi)]
-        public static extern uint duk_eval_raw(IntPtr ctx, string src_buffer, ulong src_length, uint flags);
+        public static bool Evaluate(IntPtr ctx, string source)
+        {
+            var compilationFlags =
+                CompilationFlags.DUK_COMPILE_EVAL |
+                CompilationFlags.DUK_COMPILE_NOSOURCE |
+                CompilationFlags.DUK_COMPILE_STRLEN |
+                CompilationFlags.DUK_COMPILE_NOFILENAME |
+                CompilationFlags.DUK_COMPILE_SAFE;
 
-        [DllImport("duktape")]
-        public static extern int duk_get_int(IntPtr ctx, int idx);
+            return NativeMethods.duk_eval_raw(ctx, source, (ulong)source.Length, (uint)compilationFlags) == 0;
+        }
 
-        [DllImport("duktape")]
-        public static extern IntPtr duk_safe_to_lstring(IntPtr ctx, int idx, IntPtr out_len);
+        public static int GetResultInt(IntPtr ctx)
+        {
+            return NativeMethods.duk_get_int(ctx, -1);
+        }
+
+        public static string CoerceToString(IntPtr ctx)
+        {
+            return Marshal.PtrToStringAnsi(NativeMethods.duk_safe_to_lstring(ctx, -1, IntPtr.Zero));
+        }
+
+        private static class NativeMethods
+        {
+            [DllImport("duktape")]
+            public static extern IntPtr duk_create_heap(IntPtr alloc_func, IntPtr realloc_func, IntPtr free_func,
+                IntPtr heap_udata, IntPtr fatal_handler);
+
+            [DllImport("duktape")]
+            public static extern IntPtr duk_destroy_heap(IntPtr ctx);
+
+            [DllImport("duktape", CharSet = CharSet.Ansi)]
+            public static extern uint duk_eval_raw(IntPtr ctx, string src_buffer, ulong src_length, uint flags);
+
+            [DllImport("duktape")]
+            public static extern int duk_get_int(IntPtr ctx, int idx);
+
+            [DllImport("duktape")]
+            public static extern IntPtr duk_safe_to_lstring(IntPtr ctx, int idx, IntPtr out_len);
+        }
     }
 }
