@@ -19,7 +19,7 @@ namespace Mingle
             NativeMethods.duk_destroy_heap(_dukContext);
         }
 
-        public bool Evaluate(string source)
+        public int EvaluateInt(string source)
         {
             var compilationFlags = CompilationFlags.DUK_COMPILE_EVAL | CompilationFlags.DUK_COMPILE_NOSOURCE |
                 CompilationFlags.DUK_COMPILE_STRLEN | CompilationFlags.DUK_COMPILE_NOFILENAME |
@@ -28,10 +28,10 @@ namespace Mingle
             if (NativeMethods.duk_eval_raw(_dukContext, source, (ulong)source.Length, (uint)compilationFlags) != 0)
             {
                 var error = Marshal.PtrToStringAnsi(NativeMethods.duk_safe_to_lstring(_dukContext, -1, IntPtr.Zero));
+                throw new InvalidOperationException(error);
             }
-            var result = NativeMethods.duk_get_int(_dukContext, -1);
 
-            return true;
+            return NativeMethods.duk_get_int(_dukContext, -1);
         }
     }
 }
