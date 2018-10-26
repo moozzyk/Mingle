@@ -12,13 +12,21 @@ namespace MIingle.Tests
         public void EvaluateInt_returns_expected_value()
         {
             Assert.Equal(42, _context.EvaluateInt("42 + 0"));
-            Assert.Equal(42, _context.EvaluateInt("var x = 42 + 0; \n var y = 56; \n x * y"));
         }
 
         [Fact]
         public void EvaluateInt_throws_for_invalid_JS()
         {
             Assert.Throws<InvalidOperationException>(() => _context.EvaluateInt("42 +"));
+        }
+
+        [Fact]
+        public void Exceptions_from_EvaluateInt_are_rethrown()
+        {
+            var exception = Assert.Throws<InvalidOperationException>(
+                () => _context.EvaluateInt("throw new Error('Error occurred.')"));
+
+            Assert.Equal("Error: Error occurred.", exception.Message);
         }
 
         public void Dispose()

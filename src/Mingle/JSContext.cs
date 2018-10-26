@@ -10,6 +10,10 @@ namespace Mingle
         public JSContext()
         {
             _dukContext = Duktape.CreateHeap();
+            if (_dukContext == IntPtr.Zero)
+            {
+                throw new InvalidOperationException("Unable to create Duktape context");
+            }
         }
 
         public void Dispose()
@@ -25,7 +29,7 @@ namespace Mingle
                 throw new InvalidOperationException(Duktape.CoerceToString(_dukContext));
             }
 
-            return Duktape.GetResultInt(_dukContext);
+            return Duktape.GetInt(_dukContext);
         }
     }
 }

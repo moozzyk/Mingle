@@ -42,7 +42,7 @@ namespace Mingle.Internal.Duktape
             return NativeMethods.duk_eval_raw(ctx, source, (ulong)source.Length, (uint)compilationFlags) == 0;
         }
 
-        public static int GetResultInt(IntPtr ctx)
+        public static int GetInt(IntPtr ctx)
         {
             return NativeMethods.duk_get_int(ctx, -1);
         }
