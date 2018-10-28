@@ -102,5 +102,28 @@ namespace MIingle.Tests
             public void Dispose() => _context.Dispose();
         }
 
+        public class EvaluateStringTests : IDisposable
+        {
+            private JSContext _context = new JSContext();
+
+            [Fact]
+            public void EvaluateString_returns_expected_value() =>
+                Assert.Equal("42", _context.EvaluateString(@"'4' + '2'"));
+
+            [Fact]
+            public void EvaluateString_throws_for_invalid_JS() =>
+                Assert.Throws<InvalidOperationException>(() => _context.EvaluateString("42 +"));
+
+            [Fact]
+            public void Exceptions_from_EvaluateString_are_rethrown()
+            {
+                var exception = Assert.Throws<InvalidOperationException>(
+                    () => _context.EvaluateString("throw new Error('Error occurred.')"));
+
+                Assert.Equal("Error: Error occurred.", exception.Message);
+            }
+
+            public void Dispose() => _context.Dispose();
+        }
     }
 }
