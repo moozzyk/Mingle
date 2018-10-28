@@ -37,6 +37,8 @@ namespace Mingle.Internal.Duktape
             return NativeMethods.duk_eval_raw(ctx, source, (ulong)source.Length, (uint)compilationFlags) == 0;
         }
 
+        public static bool GetBool(IntPtr ctx) => NativeMethods.duk_get_boolean(ctx, -1);
+
         public static int GetInt(IntPtr ctx) => NativeMethods.duk_get_int(ctx, -1);
 
         public static string CoerceToString(IntPtr ctx) =>
@@ -53,6 +55,9 @@ namespace Mingle.Internal.Duktape
 
             [DllImport("duktape", CharSet = CharSet.Ansi)]
             public static extern uint duk_eval_raw(IntPtr ctx, string src_buffer, ulong src_length, uint flags);
+
+            [DllImport("duktape")]
+            public static extern bool duk_get_boolean(IntPtr ctx, int idx);
 
             [DllImport("duktape")]
             public static extern int duk_get_int(IntPtr ctx, int idx);

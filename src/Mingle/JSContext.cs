@@ -16,9 +16,16 @@ namespace Mingle
             }
         }
 
-        public void Dispose()
+        public void Dispose() => Duktape.DestroyHeap(_dukContext);
+
+        public bool EvaluateBool(string source)
         {
-            Duktape.DestroyHeap(_dukContext);
+            if (!Duktape.Evaluate(_dukContext, source))
+            {
+                throw new InvalidOperationException(Duktape.CoerceToString(_dukContext));
+            }
+
+            return Duktape.GetBool(_dukContext);
         }
 
         public int EvaluateInt(string source)
