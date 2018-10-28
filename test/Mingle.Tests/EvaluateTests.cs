@@ -77,5 +77,30 @@ namespace MIingle.Tests
 
             public void Dispose() => _context.Dispose();
         }
+
+        public class EvaluateUIntTests : IDisposable
+        {
+            private JSContext _context = new JSContext();
+
+            [Fact]
+            public void EvaluateUInt_returns_expected_value() =>
+                Assert.Equal(42u, _context.EvaluateUInt("42 + 0"));
+
+            [Fact]
+            public void EvaluateUInt_throws_for_invalid_JS() =>
+                Assert.Throws<InvalidOperationException>(() => _context.EvaluateUInt("42 +"));
+
+            [Fact]
+            public void Exceptions_from_EvaluateUInt_are_rethrown()
+            {
+                var exception = Assert.Throws<InvalidOperationException>(
+                    () => _context.EvaluateUInt("throw new Error('Error occurred.')"));
+
+                Assert.Equal("Error: Error occurred.", exception.Message);
+            }
+
+            public void Dispose() => _context.Dispose();
+        }
+
     }
 }

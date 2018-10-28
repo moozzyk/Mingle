@@ -20,32 +20,34 @@ namespace Mingle
 
         public bool EvaluateBool(string source)
         {
-            if (!Duktape.Evaluate(_dukContext, source))
-            {
-                throw new InvalidOperationException(Duktape.CoerceToString(_dukContext));
-            }
-
+            Evaluate(source);
             return Duktape.GetBool(_dukContext);
         }
 
         public double EvaluateNumber(string source)
         {
-            if (!Duktape.Evaluate(_dukContext, source))
-            {
-                throw new InvalidOperationException(Duktape.CoerceToString(_dukContext));
-            }
-
+            Evaluate(source);
             return Duktape.GetNumber(_dukContext);
         }
 
         public int EvaluateInt(string source)
         {
+            Evaluate(source);
+            return Duktape.GetInt(_dukContext);
+        }
+
+        public uint EvaluateUInt(string source)
+        {
+            Evaluate(source);
+            return Duktape.GetUInt(_dukContext);
+        }
+
+        private void Evaluate(string source)
+        {
             if (!Duktape.Evaluate(_dukContext, source))
             {
                 throw new InvalidOperationException(Duktape.CoerceToString(_dukContext));
             }
-
-            return Duktape.GetInt(_dukContext);
         }
     }
 }

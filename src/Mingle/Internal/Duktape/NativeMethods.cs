@@ -43,6 +43,8 @@ namespace Mingle.Internal.Duktape
 
         public static int GetInt(IntPtr ctx) => NativeMethods.duk_get_int(ctx, -1);
 
+        public static uint GetUInt(IntPtr ctx) => NativeMethods.duk_get_uint(ctx, -1);
+
         public static string CoerceToString(IntPtr ctx) =>
             Marshal.PtrToStringAnsi(NativeMethods.duk_safe_to_lstring(ctx, -1, IntPtr.Zero));
 
@@ -66,6 +68,9 @@ namespace Mingle.Internal.Duktape
 
             [DllImport("duktape")]
             public static extern int duk_get_int(IntPtr ctx, int idx);
+
+            [DllImport("duktape")]
+            public static extern uint duk_get_uint(IntPtr ctx, int idx);
 
             [DllImport("duktape")]
             public static extern IntPtr duk_safe_to_lstring(IntPtr ctx, int idx, IntPtr out_len);
