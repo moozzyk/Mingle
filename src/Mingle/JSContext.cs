@@ -23,7 +23,6 @@ namespace Mingle
 
         public int EvaluateInt(string source)
         {
-
             if (!Duktape.Evaluate(_dukContext, source))
             {
                 throw new InvalidOperationException(Duktape.CoerceToString(_dukContext));

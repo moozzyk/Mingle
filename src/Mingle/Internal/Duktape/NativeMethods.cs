@@ -20,15 +20,10 @@ namespace Mingle.Internal.Duktape
 
     public static class Duktape
     {
-        public static IntPtr CreateHeap()
-        {
-            return NativeMethods.duk_create_heap(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
-        }
+        public static IntPtr CreateHeap() =>
+            NativeMethods.duk_create_heap(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
 
-        public static void DestroyHeap(IntPtr ctx)
-        {
-            NativeMethods.duk_destroy_heap(ctx);
-        }
+        public static void DestroyHeap(IntPtr ctx) => NativeMethods.duk_destroy_heap(ctx);
 
         public static bool Evaluate(IntPtr ctx, string source)
         {
@@ -42,15 +37,10 @@ namespace Mingle.Internal.Duktape
             return NativeMethods.duk_eval_raw(ctx, source, (ulong)source.Length, (uint)compilationFlags) == 0;
         }
 
-        public static int GetInt(IntPtr ctx)
-        {
-            return NativeMethods.duk_get_int(ctx, -1);
-        }
+        public static int GetInt(IntPtr ctx) => NativeMethods.duk_get_int(ctx, -1);
 
-        public static string CoerceToString(IntPtr ctx)
-        {
-            return Marshal.PtrToStringAnsi(NativeMethods.duk_safe_to_lstring(ctx, -1, IntPtr.Zero));
-        }
+        public static string CoerceToString(IntPtr ctx) =>
+            Marshal.PtrToStringAnsi(NativeMethods.duk_safe_to_lstring(ctx, -1, IntPtr.Zero));
 
         private static class NativeMethods
         {
