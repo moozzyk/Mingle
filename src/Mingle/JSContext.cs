@@ -28,6 +28,16 @@ namespace Mingle
             return Duktape.GetBool(_dukContext);
         }
 
+        public double EvaluateNumber(string source)
+        {
+            if (!Duktape.Evaluate(_dukContext, source))
+            {
+                throw new InvalidOperationException(Duktape.CoerceToString(_dukContext));
+            }
+
+            return Duktape.GetNumber(_dukContext);
+        }
+
         public int EvaluateInt(string source)
         {
             if (!Duktape.Evaluate(_dukContext, source))

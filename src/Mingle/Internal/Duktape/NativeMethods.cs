@@ -39,6 +39,8 @@ namespace Mingle.Internal.Duktape
 
         public static bool GetBool(IntPtr ctx) => NativeMethods.duk_get_boolean(ctx, -1);
 
+        public static double GetNumber(IntPtr ctx) => NativeMethods.duk_get_number(ctx, -1);
+
         public static int GetInt(IntPtr ctx) => NativeMethods.duk_get_int(ctx, -1);
 
         public static string CoerceToString(IntPtr ctx) =>
@@ -58,6 +60,9 @@ namespace Mingle.Internal.Duktape
 
             [DllImport("duktape")]
             public static extern bool duk_get_boolean(IntPtr ctx, int idx);
+
+            [DllImport("duktape")]
+            public static extern double duk_get_number(IntPtr ctx, int idx);
 
             [DllImport("duktape")]
             public static extern int duk_get_int(IntPtr ctx, int idx);
