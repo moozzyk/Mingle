@@ -6,6 +6,26 @@ namespace MIingle.Tests
 {
     public class EvaluateTest
     {
+        public class Evaluate : IDisposable
+        {
+            private JSContext _context = new JSContext();
+
+            [Fact]
+            public void Evaluate_throws_for_invalid_JS() =>
+                Assert.Throws<InvalidOperationException>(() => _context.Evaluate("na("));
+
+            [Fact]
+            public void Exceptions_from_Evaluate_are_rethrown()
+            {
+                var exception = Assert.Throws<InvalidOperationException>(
+                    () => _context.Evaluate("throw new Error('Error occurred.')"));
+
+                Assert.Equal("Error: Error occurred.", exception.Message);
+            }
+
+            public void Dispose() => _context.Dispose();
+        }
+
         public class EvaluateBoolTests: IDisposable
         {
             private JSContext _context = new JSContext();

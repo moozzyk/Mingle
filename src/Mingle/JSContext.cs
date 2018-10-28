@@ -48,7 +48,7 @@ namespace Mingle
             return Duktape.GetString(_dukContext);
         }
 
-        private void Evaluate(string source)
+        public void Evaluate(string source)
         {
             if (!Duktape.Evaluate(_dukContext, source))
             {
